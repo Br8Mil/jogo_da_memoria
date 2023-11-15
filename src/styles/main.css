@@ -1,5 +1,6 @@
 body {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -91,8 +92,4 @@ h2 {
 .boxOpen::after,
 .boxMatch::after {
   transform: rotateY(180deg);
-}
-
-#bgm {
-  display: none;
 }

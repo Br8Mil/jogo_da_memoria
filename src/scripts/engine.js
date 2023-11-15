@@ -63,3 +63,6 @@ function playSound(audioName) {
   let audio = new Audio(`./src/sounds/${audioName}.mp3`);
   audio.play();
 }
+
+
+

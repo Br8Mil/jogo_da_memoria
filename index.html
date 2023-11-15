@@ -16,10 +16,20 @@
     <button class="reset" onclick="window.location.reload()">RESET GAME</button>
   </div>
 
-  <audio id="bgm" controls autoplay>
-    <source src="./src/sounds/lopping.mp3"
+  <audio id="bgm" autoplay loop>
+    <source src="./src/sounds/bgm.mp3"
     type = "audio/mp3">
   </audio>
+
+  <div>
+    <button onclick="document.getElementById('bgm').play()">Reproduzir Som</button>
+    <button onclick="document.getElementById('bgm').pause()">Pausar Som</button>
+  </div>
+
+  <input type="range" id="weight" min="0" value="0.5" max="1" step="0.1" onchange="document.getElementById('bgm').volume=this.value">
+
+  
+  
 
   <script src="./src/scripts/engine.js" defer></script>
 </body>
