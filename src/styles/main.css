@@ -92,3 +92,7 @@ h2 {
 .boxMatch::after {
   transform: rotateY(180deg);
 }
+
+#bgm {
+  display: none;
+}

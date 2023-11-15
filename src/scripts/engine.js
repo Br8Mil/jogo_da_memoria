@@ -53,6 +53,13 @@ function checkMatch() {
   openCards = [];
 
   if (document.querySelectorAll(".boxMatch").length === emojis.length) {
+    playSound("complete");
     alert("Você venceu !");
   }
+}
+
+
+function playSound(audioName) {
+  let audio = new Audio(`./src/sounds/${audioName}.mp3`);
+  audio.play();
 }
