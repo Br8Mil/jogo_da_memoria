@@ -1,61 +1,90 @@
 const emojis = [
-    "🐱", "🐱", "🦝", "🦝", "🦊", "🦊", "🐶", "🐶",
-    "🐵", "🐵", "🦁", "🦁", "🐯", "🐯", "🐮", "🐮"
-  ];
-  let openCards = [];
-  
-  const shuffleEmojis = shuffleArray([...emojis]);
-  
-  function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
+  "🐱", "🐱", "🦝", "🦝", "🦊", "🦊", "🐶", "🐶",
+  "🐵", "🐵", "🦁", "🦁", "🐯", "🐯", "🐮", "🐮"
+];
+
+let openCards = [];
+const shuffleEmojis = shuffleArray([...emojis]);
+
+// Função de embaralhamento usando Fisher-Yates
+function shuffleArray(array) {
+  const shuffledArray = [...array];
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
   }
-  
-  function createGameBoard() {
-    const gameBoard = document.querySelector(".game");
-    shuffleEmojis.forEach(emoji => {
-      const box = document.createElement("div");
-      box.className = "item";
-      box.innerHTML = emoji;
-      box.onclick = handleClick;
-      gameBoard.appendChild(box);
-    });
+  return shuffledArray;
+}
+
+// Criação do tabuleiro de jogo
+function createGameBoard() {
+  const gameBoard = document.querySelector(".game");
+  shuffleEmojis.forEach(emoji => {
+    const box = createCard(emoji);
+    gameBoard.appendChild(box);
+  });
+}
+
+// Função para criar cada carta do jogo
+function createCard(emoji) {
+  const box = document.createElement("div");
+  box.className = "item";
+  box.innerHTML = emoji;
+  box.onclick = handleClick;
+  return box;
+}
+
+// Manipulação de clique nas cartas
+function handleClick() {
+  if (openCards.length < 2 && !this.classList.contains("boxOpen")) {
+    flipCard(this);
+    openCards.push(this);
   }
-  
-  function handleClick() {
-    if (openCards.length < 2 && !this.classList.contains("boxOpen")) {
-      this.classList.add("boxOpen");
-      openCards.push(this);
-    }
-  
-    if (openCards.length === 2) {
-      setTimeout(checkMatch, 500);
-    }
+
+  if (openCards.length === 2) {
+    setTimeout(checkMatch, 500);
   }
-  
-  function checkMatch() {
-    const [firstCard, secondCard] = openCards;
-    if (firstCard.innerHTML === secondCard.innerHTML) {
-      firstCard.classList.add("boxMatch");
-      secondCard.classList.add("boxMatch");
-    } else {
-      firstCard.classList.remove("boxOpen");
-      secondCard.classList.remove("boxOpen");
-    }
-    openCards = [];
-  
-    if (document.querySelectorAll(".boxMatch").length === emojis.length) {
-      playSound("complete");
-      alert("Você venceu!");
-    }
+}
+
+// Função para virar a carta
+function flipCard(card) {
+  card.classList.add("boxOpen");
+}
+
+// Verificação de correspondência entre cartas
+function checkMatch() {
+  const [firstCard, secondCard] = openCards;
+  if (firstCard.innerHTML === secondCard.innerHTML) {
+    matchCards(firstCard, secondCard);
+  } else {
+    unflipCards(firstCard, secondCard);
   }
-  
-  function playSound(audioName) {
-    const audio = new Audio(`./src/sounds/${audioName}.mp3`);
-    audio.play();
+  openCards = [];
+
+  // Verifica se o jogo foi concluído
+  if (document.querySelectorAll(".boxMatch").length === emojis.length) {
+    playSound("complete");
+    alert("Você venceu!");
   }
-  
-  createGameBoard();  
+}
+
+// Função para marcar cartas como correspondentes
+function matchCards(firstCard, secondCard) {
+  firstCard.classList.add("boxMatch");
+  secondCard.classList.add("boxMatch");
+  playSound("match");
+}
+
+// Função para virar as cartas de volta
+function unflipCards(firstCard, secondCard) {
+  firstCard.classList.remove("boxOpen");
+  secondCard.classList.remove("boxOpen");
+}
+
+// Função para reproduzir sons
+function playSound(audioName) {
+  const audio = new Audio(`./src/sounds/${audioName}.mp3`);
+  audio.play();
+}
+
+createGameBoard();
